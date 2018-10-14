@@ -1,3 +1,5 @@
+var timeId = null // variável que recebe a chamada da função timeout
+
 function iniciaJogo() {
     var url = window.location.search;
     
@@ -29,11 +31,16 @@ function iniciaJogo() {
         
     cria_baloes(qtde_baloes);
 
-    document.getElementById('baloes_inteiros').innerHTML = qtde_baloes;
+    document.getElementById('baloes_inteiros').innerHTML = 20;
     document.getElementById('baloes_estourados').innerHTML = 0;
 
-    
+    contagem_tempo(tempo_segundos);
+}
 
+function contagem_tempo(segundos) {
+
+    document.getElementById('cronometro').innerHTML = segundos;
+    timeId = setTimeout("contagem_tempo("+(segundos - 1)+")", 1000)
 
 }
 
