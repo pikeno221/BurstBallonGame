@@ -5,7 +5,8 @@ function iniciaJogo() {
     
     var nivel_jogo = url.replace('?', "");
     var tempo_segundos = 0
-    var qtde_baloes = 10;
+    var qtde_baloes = 18;
+    var qtde_baloes_estourados = 0
     //alert(nivel_jogo);
 
 
@@ -31,17 +32,30 @@ function iniciaJogo() {
         
     cria_baloes(qtde_baloes);
 
-    document.getElementById('baloes_inteiros').innerHTML = 20;
-    document.getElementById('baloes_estourados').innerHTML = 0;
+    document.getElementById('baloes_inteiros').innerHTML = qtde_baloes;
+    document.getElementById('baloes_estourados').innerHTML = qtde_baloes_estourados;
 
-    contagem_tempo(tempo_segundos);
+    contagem_tempo(tempo_segundos +1);
 }
 
 function contagem_tempo(segundos) {
 
-    document.getElementById('cronometro').innerHTML = segundos;
-    timeId = setTimeout("contagem_tempo("+(segundos - 1)+")", 1000)
+    segundos = segundos - 1;
 
+    if (segundos < 0) {
+        clearTimeout(timeId);
+        game_over();
+        return false;
+    }
+
+
+    document.getElementById('cronometro').innerHTML = segundos;
+    timeId = setTimeout("contagem_tempo("+(segundos)+")", 1000)
+
+}
+
+function game_over() {
+    alert('tempo esgotado, tente novamente');
 }
 
 function cria_baloes(qtde_baloes) {
@@ -51,7 +65,34 @@ function cria_baloes(qtde_baloes) {
         var balao = document.createElement("img");
         balao.src = 'imagens/balao_azul_pequeno.png';
         balao.style.margin = '10px';
+        balao.id = 'b' + i;
+        
+        balao.onclick = function() { estourar(this); };
 
         document.getElementById('cenario').appendChild(balao);
     }
+
+    
+}
+
+
+function estourar(e){
+    
+    var id_balao = e.id;
+
+    document.getElementById(id_balao).src = 'imagens/balao_azul_pequeno_estourado.png';
+
+    atualiza_pontuacao();
+    
+}
+
+function atualiza_pontuacao() {
+    var pontuacao_atual = document.getElementById('baloes_inteiros').innerHTML;
+    pontuacao_atual --;
+    document.getElementById('baloes_inteiros').innerHTML = pontuacao_atual;
+
+    var pontuacao_atual_estourados = document.getElementById('baloes_estourados').innerHTML;
+    pontuacao_atual_estourados ++;
+    document.getElementById('baloes_estourados').innerHTML = pontuacao_atual_estourados;
+
 }
